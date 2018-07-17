@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="assets/scss/style.css">
     <link href="assets/css/lib/vector-map/jqvmap.min.css" rel="stylesheet">
 
+    <!-- loading css -->
+    <link rel="stylesheet" href="assets/css/loading.css">
+
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
@@ -56,7 +59,7 @@
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="index.html">
+                        <a id="button-dashboard" href="#">
                             <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                     </li>
                     <li class="active">
@@ -784,7 +787,6 @@
         </div>
 
         <!-- ASTE TABLE -->
-
         <div class="content mt-3" id="aste-table" style="display: none">
             <div class="animated fadeIn">
                 <div class="row">
@@ -820,6 +822,28 @@
             </div>
             <!-- .animated -->
         </div>
+
+        <!-- ASTA INFO -->
+        <div class="content mt-3" id="aste-info" style="display: none">
+            <div class="col-sm-6">prova</div>
+            <div class="col-sm-6">
+                <iframe src="./chat/chat.html" frameborder="0" scrolling="no" style="width: 100%; height: 450px;"></iframe>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="card" id="card-desc-asta">
+                    Molto bello veramente
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card" id="card-info-asta">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADING -->
+        <div class="loading" id="loading" style="display: none">Loading&#8230;</div>
 
         <!-- .content -->
     </div>

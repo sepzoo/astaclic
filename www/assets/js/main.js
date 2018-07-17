@@ -1,6 +1,6 @@
 $.noConflict();
 
-
+var pagina_attuale = 'dashboard';
 
 jQuery(document).ready(function ($) {
 
@@ -30,9 +30,15 @@ jQuery(document).ready(function ($) {
 	});
 
 	$('#button-table-aste').on('click', function () {
-		$('#dashboard').hide();
-		$('#aste-table').show();
-		AppName.addAsteTable(AppName.aste);
+		AppName.changePage('aste-table', AppName.goAsteTable);
+		// $('#dashboard').hide();
+		// $('#aste-table').show();
+		// pagina_attuale = 'aste-table';
+		// AppName.addAsteTable(AppName.aste);
+	})
+
+	$('#button-dashboard').on('click', function () {
+		AppName.changePage('dashboard', AppName.goDashboard)
 	})
 
 	var AppName = {
@@ -47,6 +53,50 @@ jQuery(document).ready(function ($) {
 				AppName.logout_function();
 				// do something
 			});
+		},
+
+		goDashboard: function (page) {
+			console.log('go dashboard')
+			$.get('/aste-attive', function (data) {
+				console.log(data)
+				AppName.addAsteDashboard(data);
+				pagina_attuale = 'dashboard';
+				$('#loading').hide();
+				$('#' + page).show();
+			})
+
+			// $.ajax({
+			// 	url: '/aste-attive',
+			// 	type: "get",
+			// 	async: false,
+			// 	success: function (data) {
+			// 		console.log(data)
+			// 		AppName.addAsteDashboard(data);
+			// 		pagina_attuale = 'dashboard';
+			// 	},
+			// 	error: function () {
+			// 		console.log('errore')
+			// 	}
+			// })
+
+			console.log('fine go dash')
+		},
+
+		goAsteTable: function () {
+			console.log('go aste table');
+			$.get('/aste-table', function (data) {
+				AppName.addAsteTable(data);
+				pagina_attuale = 'aste-table';
+			})
+		},
+
+		changePage: function (page, callback_function) {
+			console.log(pagina_attuale)
+			$('#' + pagina_attuale).hide();
+			$('#loading').show();
+			pagina_attuale = 'loading';
+
+			callback_function(page);
 		},
 
 		getSession: function (callback_function) {
@@ -155,6 +205,7 @@ jQuery(document).ready(function ($) {
 
 		addAsteDashboard: function (data) {
 			AppName.aste = data;
+			$('#table-dashboard-body').empty();
 			data.forEach(function (snap) {
 				var element =
 					$('<tr>\
@@ -170,7 +221,7 @@ jQuery(document).ready(function ($) {
 
 		addAsteTable: function () {
 			AppName.aste.forEach(function (snap) {
-				var element =
+				var element = $(
 					'<tr>\
 					<th scope="row">'+ snap.title + '</th>\
 					<td>'+ snap.fine + '</td>\
@@ -181,7 +232,30 @@ jQuery(document).ready(function ($) {
 					<td>\
                      <button class="btn btn-outline-success">Vai</button>\
                     </td>\
-				</tr>';
+				</tr>');
+
+				$(element).on('click', function () {
+					$('#aste-table').hide();
+					$('#aste-info').show();
+
+					pagina_attuale = 'aste-info';
+
+					var cardBody =
+						'<div class="card-header">\
+                        <strong>Info asta</strong>\
+                    </div>\
+						<div class="card-body">\
+					 Titolo: '+ snap.title + ' <br>\
+					 Fine: ' + snap.fine + '<br>\
+					 Vincitore: ' + snap.vincitore + '<br>\
+					 Valore: ' + snap.valore_attuale + '<br>\
+					 Rilancio: ' + snap.rilancio_minimo + '<br>\
+					 Stato: ' + snap.stato + '<br>\
+					</div>';
+
+					$('#card-info-asta').empty();
+					$('#card-info-asta').append(cardBody);
+				})
 
 				$('#table-aste-body').append(element);
 			});
@@ -189,12 +263,8 @@ jQuery(document).ready(function ($) {
 			$.fn.dataTable.moment('dd, MM Do, YYYY');
 			$('#bootstrap-data-table').dataTable();
 		},
-
-		get_aste_dashboard: function () {
-			$.get("/aste-dashboard", AppName.addAsteDashboard);
-		}
 	};
+
 	AppName.init();
 	AppName.logging();
-	AppName.get_aste_dashboard();
 });

@@ -100,13 +100,30 @@ var getAste = function (req, res) {
     res.send(aste);
 }
 
+var getAsteAttive = function (req, res) {
+    var arr = [];
+    aste.forEach(function (snap) {
+
+        if (snap.stato == 'attiva') {
+            var obj = {
+                title: snap.title,
+                fine: snap.fine,
+                stato: snap.stato
+            }
+            arr.push(obj);
+        }
+    })
+    setTimeout(function () { res.send(arr); console.log('attendo invio dati') }, 3000)
+}
+
 app.post('/login', checkLoginInput, checkLoginDb, checkLoginRespond);
 
 var getSession = function (req, res) {
     res.send(req.session.user);
 }
 app.get("/session", getSession);
-app.get("/aste-dashboard", getAste);
+app.get("/aste-attive", getAsteAttive);
+// app.get("/aste-table", getAsteTable);
 
 var destroySession = function (req, res) {
     req.session.destroy(function (err) {
