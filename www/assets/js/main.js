@@ -1,5 +1,6 @@
 $.noConflict();
 
+var pippo = 'ccccc'
 var pagina_attuale = 'dashboard';
 
 jQuery(document).ready(function ($) {
@@ -30,7 +31,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	$('#button-table-aste').on('click', function () {
-		AppName.changePage('aste-table', AppName.goAsteTable);
+		AppName.changePage('aste-table', AppName.goAsteTable, AppName.stopLoading);
 		// $('#dashboard').hide();
 		// $('#aste-table').show();
 		// pagina_attuale = 'aste-table';
@@ -81,11 +82,12 @@ jQuery(document).ready(function ($) {
 			console.log('fine go dash')
 		},
 
-		goAsteTable: function () {
+		goAsteTable: function (page, next) {
 			console.log('go aste table');
 			$.get('/aste-table', function (data) {
 				AppName.addAsteTable(data);
 				pagina_attuale = 'aste-table';
+				next(page);
 			})
 		},
 
@@ -223,8 +225,8 @@ jQuery(document).ready(function ($) {
 			AppName.sortByDate();
 		},
 
-		addAsteTable: function () {
-			AppName.aste.forEach(function (snap) {
+		addAsteTable: function (data) {
+			data.forEach(function (snap) {
 				var element = $(
 					'<tr>\
 					<th scope="row">'+ snap.title + '</th>\

@@ -116,6 +116,23 @@ var getAsteAttive = function (req, res) {
     setTimeout(function () { res.send(arr); console.log('attendo invio dati') }, 3000)
 }
 
+var getAsteTable = function (req, res) {
+    var arr = [];
+    aste.forEach(function (snap) {
+
+        var obj = {
+            title: snap.title,
+            fine: snap.fine,
+            stato: snap.stato,
+            valore_attuale: snap.valore_attuale,
+            rilancio_minimo: snap.rilancio_minimo,
+            vincitore: snap.vincitore
+        }
+        arr.push(obj);
+    })
+    setTimeout(function () { res.send(arr); console.log(arr) }, 3000)
+}
+
 app.post('/login', checkLoginInput, checkLoginDb, checkLoginRespond);
 
 var getSession = function (req, res) {
@@ -123,7 +140,7 @@ var getSession = function (req, res) {
 }
 app.get("/session", getSession);
 app.get("/aste-attive", getAsteAttive);
-// app.get("/aste-table", getAsteTable);
+app.get("/aste-table", getAsteTable);
 
 var destroySession = function (req, res) {
     req.session.destroy(function (err) {

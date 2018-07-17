@@ -68,6 +68,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('#button-send').click(function () {
+        console.log(pippo)
         $(".mytext").trigger({ type: 'keydown', which: 13, keyCode: 13 });
     })
 
