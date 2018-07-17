@@ -38,7 +38,7 @@ jQuery(document).ready(function ($) {
 	})
 
 	$('#button-dashboard').on('click', function () {
-		AppName.changePage('dashboard', AppName.goDashboard)
+		AppName.changePage('dashboard', AppName.goDashboard, AppName.stopLoading)
 	})
 
 	var AppName = {
@@ -55,14 +55,13 @@ jQuery(document).ready(function ($) {
 			});
 		},
 
-		goDashboard: function (page) {
+		goDashboard: function (page, next) {
 			console.log('go dashboard')
 			$.get('/aste-attive', function (data) {
 				console.log(data)
 				AppName.addAsteDashboard(data);
 				pagina_attuale = 'dashboard';
-				$('#loading').hide();
-				$('#' + page).show();
+				next(page);
 			})
 
 			// $.ajax({
@@ -90,13 +89,18 @@ jQuery(document).ready(function ($) {
 			})
 		},
 
-		changePage: function (page, callback_function) {
+		stopLoading: function (page) {
+			$('#loading').hide();
+			$('#' + page).show();
+		},
+
+		changePage: function (page, callback_function, next) {
 			console.log(pagina_attuale)
 			$('#' + pagina_attuale).hide();
 			$('#loading').show();
 			pagina_attuale = 'loading';
 
-			callback_function(page);
+			callback_function(page, next);
 		},
 
 		getSession: function (callback_function) {
